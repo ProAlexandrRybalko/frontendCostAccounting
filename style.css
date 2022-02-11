@@ -1,0 +1,133 @@
+body {
+    margin: 0;
+    background-color: #657580;
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+}
+
+.wrapper-accounting {
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.header p {
+    font-style: italic;
+    font-size: 40px;
+}
+
+.wrapper-managing {
+    display: flex;
+    flex-direction: column;
+    max-width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.managing {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.where-accounting {
+    display: flex;
+    flex-direction: column;
+}
+
+.how-much-accounting {
+    display: flex;
+    flex-direction: column;
+}
+
+.button-accounting {
+    display: flex;
+    flex-direction: row;
+}
+
+.how-much-value {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    font-size: 28px;
+}
+
+.view-accounting {
+    display: flex;
+    flex-direction: column;
+}
+
+.accounting {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.accounting img {
+    width: 30px;
+    height: 30px;
+}
+
+.accounting p {
+    font-size: 28px;
+    margin: 0;
+}
+
+.accounting-input {
+    border: 1px solid #797979;
+    border-radius: 5px;
+    outline: none;
+    margin-right: 20px;
+    margin-top: 5px;
+    padding-left: 20px;
+    width: 280px;
+    height: 40px;
+}
+
+.hm-accounting-input {
+    width: 180px;
+}
+
+.button-accounting {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.button-accounting button {
+    background-color: #4b8569;
+    border: none;
+    padding: 13px 20px;
+    font-size: 16px;
+}
+
+.button-accounting button:hover {
+    background-color: #30473d;
+}
+
+.button-accounting button:active {
+    background-color: #246654;
+}
+
+.number-name {
+    width: 320px;
+}
+
+.pictures-edit {
+    display: flex;
+    flex-direction: row;
+    margin-left: auto;
+}
+
+.date {
+    margin-right: 30px;
+}
