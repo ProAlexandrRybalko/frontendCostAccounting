@@ -22,7 +22,7 @@
                     <input id="how-much-accounting" class="accounting-input hm-accounting-input" type="text">
                 </div>
                 <div class="button-accounting">
-                    <button>Добавить</button>
+                    <button onclick="onAddClickButton()">Добавить</button>
                 </div>
             </div>
             <div class="how-much-value">
@@ -30,24 +30,12 @@
                 <p id="how-much-value"></p>
                 <p> р.</p>
             </div>
-            <div class="view-accounting">
-                <div class="accounting">
-                    <div id="number-name" class="number-name">
-                        <p>1) Магазин Пятерочка</p>
-                    </div>
-                    <div id="date" class="date">
-                        <p>01.02.2020</p>
-                    </div>
-                    <div id="value">
-                        <p>2020 р.</p>
-                    </div>
-                    <div class="pictures-edit">
-                        <img src="images/pencil-red-eraser-removebg-preview.png" alt="pencil">
-                        <img src="images/cross-removebg-preview.png" alt="cross">
-                    </div>
-                </div>
+            <div id="view-accounting" class="view-accounting">
+                <div id="accounting" class="accounting"></div>
             </div>
         </div>
     </div>
+
+    <script src="script.js"></script>
 </body>
 </html>

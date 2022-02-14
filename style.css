@@ -22,6 +22,7 @@ body {
 .header p {
     font-style: italic;
     font-size: 40px;
+    text-align: center;
 }
 
 .wrapper-managing {
@@ -130,4 +131,16 @@ body {
 
 .date {
     margin-right: 30px;
+}
+
+.inputWhere {
+    width: 200px;
+    border: 1px solid black;
+    outline: none;
+}
+
+.inputHowMuch {
+    width: 150px;
+    border: 1px solid black;
+    outline: none;
 }
