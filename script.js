@@ -9,9 +9,9 @@ window.onload = async function () {
   const result = await response.json();
 
   let i = 0;
-  while (i < result.data.length) {
+  while (i < result['accountings'].length) {
     allAccountings.push({
-      data: result.data[i],
+      data: result['accountings'],
       isVisibleCheck: false
     });
 
@@ -21,11 +21,25 @@ window.onload = async function () {
   render();
 }
 
+const setClassName = (elem ,name) => {
+  elem.className = name;
+}
+
+const appendKid = (parent, child) => {
+  parent.appendChild(child);
+}
+
 const render = () => {
   const content = document.getElementById('view-accounting');
+  const sum = document.getElementById("sum");
+  let sumValue = 0;
 
   while (content.firstChild) {
     content.removeChild(content.firstChild);
+  }
+
+  while (sum.firstChild) {
+    sum.removeChild(sum.firstChild);
   }
 
   allAccountings.map((item, index) => {
@@ -43,63 +57,65 @@ const render = () => {
     const inputWhere = document.createElement('input');
     const inputHowMuch = document.createElement('input');
 
-    accounting.className = "accounting";
-    where.className = "number-name";
-    date.className = "date";
-    pictures.className = "pictures-edit";
-    inputWhere.className = "inputWhere";
-    inputHowMuch.className = "inputHowMuch";
+    const parsedDate = new Date(item.data.date);
+    const day = parsedDate.getDate();
+    const month = parsedDate.getMonth() + 1; //months from 1-12
+    const year = parsedDate.getFullYear();
 
-    imageEdit.src = "images/pencil-red-eraser-removebg-preview.png";
-    imageEdit.style.width = "40px";
-    imageEdit.style.height = "40px";
-    imageEdit.style.cursor = "pointer";
-
-
-
-    imageDelete.src = "images/cross-removebg-preview.png";
-    imageDelete.style.width = "40px";
-    imageDelete.style.height = "40px";
-    imageDelete.style.cursor = "pointer";
+    imageEdit.onclick = async function () {
+      await onEditClickButton(index);
+    }
 
     imageDelete.onclick = async function () {
       await onDeleteClickButton(item.data._id, index);
     }
 
+    imageAccept.onclick = async function () {
+      await onAcceptClickButton(item.data._id, index);
+    }
+
+    const classNames = [
+      "accounting", "number-name", "date", "pictures-edit", "inputWhere", "inputHowMuch", "image", "image", "image"
+    ];
+    const elements = [accounting, where, date, pictures, inputWhere, inputHowMuch, imageEdit, imageDelete, imageAccept]
+
+    for(let i = 0; i < classNames.length; i++) {
+      setClassName(elements[i], classNames[i]);
+    }
+
+    inputWhere.type = "text";
+    inputHowMuch.type = "number";
+
+    imageEdit.src = "images/pencil-red-eraser-removebg-preview.png";
+    imageDelete.src = "images/cross-removebg-preview.png";
     imageAccept.src = "images/greenCheckTransparent.png";
-    imageAccept.style.width = "40px";
-    imageAccept.style.height = "40px";
-    imageAccept.style.cursor = "pointer";
 
-    where.id = `number-name-${index}`;
-    date.id = `date-${index}`;
-    howMuch.id = `value-${index}`;
-
-    const parsedDate = new Date(item.data.date);
-
-    const day = parsedDate.getDate();
-    const month = parsedDate.getMonth() + 1; //months from 1-12
-    const year = parsedDate.getFullYear();
+    inputWhere.id = `input-where-${index}`;
+    inputHowMuch.id = `input-how-much-${index}`;
 
     whereValue.innerText = `${index + 1}) ${item.data.where}`;
     dateValue.innerText = `${day}.${month}.${year}`;
     howMuchValue.innerText = item.data.howMuch;
 
-    if(item.isVisibleCheck) {
-      inputWhere.value = item.data.where;
-      where.appendChild(inputWhere);
-      inputWhere.value = item.data.howMuch;
-      howMuch.appendChild(inputHowMuch);
-      pictures.appendChild(imageAccept);
+    inputWhere.value = item.data.where;
+    inputHowMuch.value = item.data.howMuch;
 
+    if(item.isVisibleCheck) {
+      whereValue.style.display = "none";
+      howMuchValue.style.display = "none";
+      imageEdit.style.display = "none";
     } else {
-      where.appendChild(whereValue);
-      howMuch.appendChild(howMuchValue);
-      pictures.appendChild(imageEdit);
+      inputWhere.style.display = "none";
+      inputHowMuch.style.display = "none";
+      imageAccept.style.display = "none";
     }
 
-    pictures.appendChild(imageDelete);
-    date.appendChild(dateValue);
+    const parents = [where, where, howMuch, howMuch, pictures, pictures, pictures, date];
+    const children = [whereValue, inputWhere, inputHowMuch, howMuchValue, imageAccept, imageDelete, imageEdit, dateValue];
+
+    for(let i = 0; i < parents.length; i++) {
+      appendKid(parents[i], children[i]);
+    }
 
     accounting.appendChild(where);
     accounting.appendChild(date);
@@ -107,7 +123,24 @@ const render = () => {
     accounting.appendChild(pictures);
 
     content.appendChild(accounting);
+
+    sumValue += +item.data.howMuch;
   });
+
+  const summary = document.createElement('p');
+  const sumValueP = document.createElement('p');
+  const dot = document.createElement('p');
+
+  summary.innerText = "Итого: ";
+  sumValueP.innerText = sumValue;
+  dot.innerText = " р.";
+
+  sumValueP.style.marginLeft = "10px";
+  sumValueP.style.marginRight = "10px";
+
+  sum.appendChild(summary);
+  sum.appendChild(sumValueP);
+  sum.appendChild(dot);
 }
 
 const onAddClickButton = async () => {
@@ -152,5 +185,40 @@ const onDeleteClickButton = async (id, index) => {
     allAccountings.splice(index, 1);
   }
 
+  render();
+}
+
+const onAcceptClickButton = async (id, index) => {
+  const inputWhere = document.getElementById(`input-where-${index}`);
+  const inputHowMuch = document.getElementById(`input-how-much-${index}`);
+
+  const response = await fetch("http://localhost:8000/changeAccounting", {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+      "Access-Control-Allow-Origin": "*"
+    },
+    body: JSON.stringify({
+      id: id,
+      data: {
+        where: inputWhere.value,
+        howMuch: inputHowMuch.value
+      }
+    })
+  });
+
+  const result = await response.json();
+
+  if(result.data === "changed") {
+    allAccountings[index].data.where = inputWhere.value;
+    allAccountings[index].data.howMuch = inputHowMuch.value;
+    allAccountings[index].isVisibleCheck = false;
+  }
+
+  render();
+}
+
+const onEditClickButton = async (index) => {
+  allAccountings[index].isVisibleCheck = true;
   render();
 }
